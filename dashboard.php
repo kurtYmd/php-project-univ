@@ -44,5 +44,13 @@ $conn->close();
     <form method="POST" action="create_post.php">
         <label for="title">Title:</label>
         <input type="text" id="title" name="title" required>
-        <br><
+        <br><br>
+        <label for="content">Content:</label>
+        <textarea id="content" name="content" required></textarea>
+        <br><br>
+        <input type="submit" value="Create Post">
+    </form>
+</div>
+</body>
+</html>
 
