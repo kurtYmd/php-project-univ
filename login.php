@@ -1,44 +1,47 @@
 <?php
-global $conn;
-require_once 'db_connect.php';
 session_start();
 
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+require_once 'db_connect.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Retrieve form data
     $username = $_POST["username"];
     $password = $_POST["password"];
 
-    // Validate form data (add more validation as per your requirements)
     if (empty($username) || empty($password)) {
         echo "Please fill in all the fields.";
         exit;
     }
 
-    // Prepare the SQL statement to check if the user exists
-    $checkQuery = "SELECT * FROM users WHERE username = '$username' AND password = '$password'";
-    $checkResult = $conn->query($checkQuery);
+    $checkQuery = "SELECT * FROM users WHERE username = ? AND password = ?";
+    $stmt = $conn->prepare($checkQuery);
+    $stmt->bind_param("ss", $username, $password);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
-    if ($checkResult->num_rows > 0) {
-        // User exists, set session variable to maintain logged-in state
+    if ($result->num_rows > 0) {
         $_SESSION["username"] = $username;
         header("Location: dashboard.php");
         exit;
     } else {
-        // Invalid credentials
         echo "Invalid username or password.";
     }
+
+    $stmt->close();
     $conn->close();
 }
 ?>
 
 <!doctype html>
 <html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Login Page</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
 <body>
 <div class="registration-form">
-    <form method="POST" action="login.php">
+    <form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>">
         <h2>Login</h2>
         <label for="username">Username:</label>
         <input type="text" id="username" name="username" required>
@@ -50,12 +53,4 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </form>
 </div>
 </body>
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>User Login Page</title>
-    <link rel="stylesheet" href="css/style.css">
-</head>
 </html>
