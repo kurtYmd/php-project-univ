@@ -24,7 +24,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // Insert the new blog post into the "posts" table
-    $insertQuery = "INSERT INTO posts (title, content, username) VALUES (?, ?, ?)";
+    $insertQuery = "INSERT INTO posts (title, content, username, published_date) VALUES (?, ?, ?, NOW())";
     $stmt = $conn->prepare($insertQuery);
     $stmt->bind_param("sss", $title, $content, $username);
 
@@ -86,4 +86,5 @@ $conn->close();
 </div>
 </body>
 </html>
+
 
