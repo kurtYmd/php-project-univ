@@ -72,6 +72,9 @@ $conn->close();
     <title>User Dashboard</title>
 </head>
 <body>
+<form action="logout.php" method="post">
+    <input type="submit" value="Logout">
+</form>
 <div class="registration-form">
     <h2>Create New Blog Post</h2>
     <form method="POST" action="dashboard.php">
