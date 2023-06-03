@@ -46,12 +46,14 @@ $stmt->execute();
 $result = $stmt->get_result();
 
 if ($result->num_rows > 0) {
+    echo "<div class='posts-container'>";
     echo "<h2>Your Blog Posts</h2>";
     while ($row = $result->fetch_assoc()) {
         echo "<div>";
         echo "<h3>Title: " . $row["title"] . "</h3>";
         echo "<p>Content: " . $row["content"] . "</p>";
         echo "<p>Published Date: " . $row["published_date"] . "</p>";
+        echo "</div>";
         echo "</div>";
     }
 } else {
